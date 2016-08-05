@@ -39,3 +39,5 @@ from(customerList).where(c -> c.getName().startsWith("A")).select();
     * Although there shouldn't be a noticeable overhead compared to plain streams, ListQuery is not meant to be used in extreamly time-crtitical contexts.
 
 ## Usage
+
+See [ListQueryTest](/src/test/java/com/github/crehn/listquery/ListQueryTest.java)
