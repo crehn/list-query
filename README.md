@@ -1,4 +1,4 @@
-# list-query
+# ListQuery
 
 Java 8 finally instroduced lambdas and streams. Streams offer great flexibility but can be a bit verbose. This library simplifies using them in those 80% of the cases where the full flexibility is not needed and you rather want to optimize readability.
 
