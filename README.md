@@ -10,14 +10,21 @@ Java 8 finally instroduced lambdas and streams. Streams offer great flexibility 
 In most of the cases you use streams like this:
 
 ```Java
-namesList.stream()
-    .map(name -> new Customer(name))
+names.stream()
+    .map(name -> new Customer(name.getFirstName(), name.getLastName()))
     .collect(Collectors.toList());
 ```
 or
 ```Java
-customerList.stream()
-    .filter(c -> c.getName().startsWith("A"))
+names.stream()
+    .filter(name -> name.getFirstName().startsWith("A"))
+    .collect(Collectors.toList());
+```
+or
+```Java
+names.stream()
+    .filter(name -> name.getFirstName().startsWith("A"))
+    .sorted((n1, n2) -> n1.getFirstName().compareTo(n2.getFirstName()))
     .collect(Collectors.toList());
 ```
 
@@ -25,15 +32,21 @@ You create a stream from a list, use map and/or filter and collect the result in
 
 ListQuery lets you do the following instead:
 ```Java
-from(namesList).select(name -> new Customer(name));
+from(names).select(name -> new Customer(name.getFirstName(), name.getLastName()));
 ```
 ```Java
-from(customerList).where(c -> c.getName().startsWith("A")).select();
+from(names).where(name -> name.getFirstName().startsWith("A")).select();
+```
+```Java
+from(names)
+    .where(name -> name.getFirstName().startsWith("A"))
+    .orderBy(Name::getLastName)
+    .select(e -> e);
 ```
 
 ## What ListQuery is not
 
-* ListQuery may be inspired by LINQ but it is not "LINQ for Java"
+* ListQuery may be inspired by [LINQ](https://en.wikipedia.org/wiki/Language_Integrated_Query) but it is not "LINQ for Java"
     * You cannot query anything besides lists. No databases, no XML files, etc. Just lists.
     * Have a look at this [Stackoverflow question](http://stackoverflow.com/questions/1217228/what-is-the-java-equivalent-for-linq)
 * ListQuery is not a replacement for streams
