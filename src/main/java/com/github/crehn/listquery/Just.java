@@ -1,5 +1,6 @@
 package com.github.crehn.listquery;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
@@ -19,5 +20,11 @@ public class Just {
         return list.stream() //
                 .filter(predicate) //
                 .collect(toList());
+    }
+
+    public static <T> String join(Collection<T> list, String delimiter) {
+        return list.stream() //
+                .map(Object::toString) //
+                .collect(joining(delimiter));
     }
 }
