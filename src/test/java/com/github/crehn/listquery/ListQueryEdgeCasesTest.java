@@ -125,4 +125,11 @@ public class ListQueryEdgeCasesTest {
 
         assertEquals(asList(3), result);
     }
+
+    @Test(expected = ClassCastException.class)
+    public void shouldFailOrderingTheUnorderable() {
+        from(asList(new Object(), new Object())) //
+                .ordered() //
+                .select();
+    }
 }

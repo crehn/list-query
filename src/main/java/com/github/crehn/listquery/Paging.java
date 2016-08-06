@@ -5,6 +5,16 @@ import static lombok.AccessLevel.PRIVATE;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
+/**
+ * Specifies paging of the result of a list query. The first page is page 1 (not page 0). Each page has at most
+ * {@link #getPerPage()} elements. Construct instances using {@link #page}. Example:
+ * 
+ * <pre>
+ * <code>
+ * page(2).eachContaining(10);
+ * </code>
+ * </pre>
+ */
 @Value
 @AllArgsConstructor(access = PRIVATE)
 public class Paging {
