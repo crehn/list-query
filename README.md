@@ -7,7 +7,7 @@ Java 8 finally instroduced lambdas and streams. Streams offer great flexibility 
 
 ## What ListQuery is
 
-In most of the cases you use streams like this:
+Typically you use streams like this:
 
 ```Java
 names.stream()
@@ -28,7 +28,7 @@ names.stream()
     .collect(Collectors.toList());
 ```
 
-You create a stream from a list, use map and/or filter and collect the result into a list again. The invocations of``stream()`` and ``collect()`` are mere ceremony and carry no specific meaning in most of the cases. When reading such code they are rather haystack than needle.
+You create a stream from a list, use map and/or filter and collect the result into a list again. The invocations of `stream()` and `collect()` are mere ceremony and carry no specific meaning in most of the cases. When reading such code they are rather haystack than needle.
 
 ListQuery lets you do the following instead:
 ```Java
@@ -47,7 +47,7 @@ from(names)
 ## What ListQuery is not
 
 * ListQuery may be inspired by [LINQ](https://en.wikipedia.org/wiki/Language_Integrated_Query) but it is not "LINQ for Java"
-    * You cannot query anything besides lists. No databases, no XML files, etc. Just lists.
+    * You cannot query anything besides lists (or rather collections). No databases, no XML files, etc. Just lists.
     * Have a look at this [Stackoverflow question](http://stackoverflow.com/questions/1217228/what-is-the-java-equivalent-for-linq)
 * ListQuery is not a replacement for streams
     * Streams are more powerful and sometimes you will need the expressiveness of streams. Go and use them. They are great. ListQuery is just for optimizing readability in the simple cases.
@@ -57,3 +57,20 @@ from(names)
 ## Usage
 
 See [ListQueryTest](/src/test/java/com/github/crehn/listquery/ListQueryTest.java)
+
+## Grammar
+
+The following grammar specifies valid queries:
+
+```
+ListQuery ::= FROM + [WHERE] + [".ordered()"] + [SPECIAL] + SELECT                          
+            | FROM + [WHERE] +    ORDER_BY    + [SPECIAL] + MAP_SELECT ;                    
+FROM ::= "from(collection)" ;                                                               
+WHERE ::= ".where(predicate)" + [AND_OR] ;                                                  
+AND_OR ::= { ".and(predicate)" | ".or(predicate)" } ;                                       
+ORDER_BY ::= ".orderBy(comparator)" | ".orderBy(getter)" ;                                  
+SPECIAL ::= { [".limit(limit)"] + [".distinct()"] } ;                                       
+SELECT ::= MAP_SELECT | IDENTITY_SELECT ;                                                   
+IDENTITY_SELECT ::= ".select()" | ".select(paging)" | ".selectFirst()" ;                    
+MAP_SELECT ::= ".select(mapper)" | ".select(mapper, paging)" | ".selectFirst(mapper)" ;     
+```
