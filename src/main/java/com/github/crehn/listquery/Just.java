@@ -27,4 +27,19 @@ public class Just {
                 .map(Object::toString) //
                 .collect(joining(delimiter));
     }
+
+    public static <T> boolean allAre(Collection<T> list, Predicate<T> predicate) {
+        return list.stream() //
+                .allMatch(predicate);
+    }
+
+    public static <T> boolean oneExists(Collection<T> list, Predicate<T> predicate) {
+        return list.stream() //
+                .anyMatch(predicate);
+    }
+
+    public static <T> boolean noneIs(Collection<T> list, Predicate<T> predicate) {
+        return list.stream() //
+                .noneMatch(predicate);
+    }
 }
