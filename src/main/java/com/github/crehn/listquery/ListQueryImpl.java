@@ -10,7 +10,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.github.crehn.listquery.ListQuery.UntypedListQueryWithWhereClause;
+import com.github.crehn.listquery.ListQuery.*;
 
 import lombok.*;
 import lombok.experimental.Wither;
@@ -21,7 +21,12 @@ import lombok.experimental.Wither;
 @Wither(PACKAGE)
 @AllArgsConstructor(access = PRIVATE)
 @RequiredArgsConstructor(access = PRIVATE)
-public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
+public class ListQueryImpl<T> implements //
+        ListQueryWithFrom<T>, //
+        ListQueryWithWhere<T>, //
+        ListQueryWithOrderBy<T>, //
+        ListQueryWithSpecial<T> //
+{
 
     @NonNull
     @Getter(PACKAGE)
@@ -35,7 +40,7 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
 
     // from
 
-    public static <T> UntypedListQuery<T> from(List<T> list) {
+    public static <T> ListQueryWithFrom<T> from(List<T> list) {
         return new ListQueryImpl<>(list);
     }
 
@@ -43,17 +48,17 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
     // where
 
     @Override
-    public UntypedListQueryWithWhereClause<T> where(Predicate<T> predicate) {
+    public ListQueryWithWhere<T> where(Predicate<T> predicate) {
         return withWhere(this.where.and(predicate));
     }
 
     @Override
-    public UntypedListQueryWithWhereClause<T> and(Predicate<T> predicate) {
+    public ListQueryWithWhere<T> and(Predicate<T> predicate) {
         return withWhere(this.where.and(predicate));
     }
 
     @Override
-    public UntypedListQueryWithWhereClause<T> or(Predicate<T> predicate) {
+    public ListQueryWithWhere<T> or(Predicate<T> predicate) {
         return withWhere(this.where.or(predicate));
     }
 
@@ -61,18 +66,18 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
     // order by
 
     @Override
-    public UntypedListQuery<T> ordered() {
+    public ListQueryWithOrderBy<T> ordered() {
         return withOrderedNaturally(true);
 
     }
 
     @Override
-    public <U> TypedListQuery<T, U> orderBy(Comparator<U> comparator) {
+    public <U> TypedListQueryWithOrderBy<T, U> orderBy(Comparator<U> comparator) {
         return new TypedListQueryImpl<T, U>(this).withComparator(comparator);
     }
 
     @Override
-    public <U, V extends Comparable<V>> TypedListQuery<T, U> orderBy(Function<U, V> getter) {
+    public <U, V extends Comparable<V>> TypedListQueryWithOrderBy<T, U> orderBy(Function<U, V> getter) {
         return new TypedListQueryImpl<T, U>(this)
                 .withComparator((e1, e2) -> getter.apply(e1).compareTo(getter.apply(e2)));
     }
@@ -81,12 +86,12 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
     // distinct, limit
 
     @Override
-    public UntypedListQuery<T> distinct() {
+    public ListQueryWithOrderBy<T> distinct() {
         return this.withDistinct(true);
     }
 
     @Override
-    public UntypedListQuery<T> limit(long limit) {
+    public ListQueryWithOrderBy<T> limit(long limit) {
         return this.withLimit(limit);
     }
 

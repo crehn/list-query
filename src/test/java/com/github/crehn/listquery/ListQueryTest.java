@@ -17,20 +17,6 @@ public class ListQueryTest {
     private List<Integer> list = asList(1, 2, 3, 4, 5);
 
     @Test
-    public void shouldNotCompile() {
-        Comparator<Integer> comparator = (Integer e1, Integer e2) -> -1 * e1.compareTo(e2);
-
-        // from(list).orderBy(Integer::intValue).where(e -> e>1).select();
-        // from(list).orderBy(comparator).where(e -> e>1).select();
-        // from(list).orderBy(comparator).ordered().select();
-        from(list).ordered().where(e -> e > 1).select();
-        from(list).ordered().ordered().select();
-        from(list).ordered().orderBy(comparator).select(e -> e);
-        from(list).distinct().orderBy(comparator).select(e -> e);
-        from(list).distinct().ordered().select();
-    }
-
-    @Test
     public void shouldSelect() {
         List<Integer> result = from(list).select();
 
@@ -72,16 +58,6 @@ public class ListQueryTest {
         List<Integer> result = from(list).where(e -> e > 2).select();
 
         assertEquals(asList(3, 4, 5), result);
-    }
-
-    @Test
-    public void shouldFilterTwice() {
-        List<Integer> result = from(list) //
-                .where(e -> e > 2) //
-                .where(e -> e <= 4) //
-                .select();
-
-        assertEquals(asList(3, 4), result);
     }
 
     @Test

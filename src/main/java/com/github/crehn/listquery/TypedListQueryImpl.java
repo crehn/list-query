@@ -9,7 +9,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.github.crehn.listquery.ListQuery.TypedListQuery;
+import com.github.crehn.listquery.ListQuery.TypedListQueryWithOrderBy;
+import com.github.crehn.listquery.ListQuery.TypedListQueryWithSpecial;
 
 import lombok.*;
 import lombok.experimental.Wither;
@@ -20,7 +21,10 @@ import lombok.experimental.Wither;
 @Wither(PACKAGE)
 @AllArgsConstructor(access = PRIVATE)
 @RequiredArgsConstructor(access = PRIVATE)
-public class TypedListQueryImpl<T, U> implements TypedListQuery<T, U> {
+public class TypedListQueryImpl<T, U> implements //
+        TypedListQueryWithOrderBy<T, U>, //
+        TypedListQueryWithSpecial<T, U> //
+{
 
     @NonNull
     private Collection<T> list;
@@ -35,12 +39,12 @@ public class TypedListQueryImpl<T, U> implements TypedListQuery<T, U> {
     }
 
     @Override
-    public TypedListQuery<T, U> distinct() {
+    public TypedListQueryWithOrderBy<T, U> distinct() {
         return this.withDistinct(true);
     }
 
     @Override
-    public TypedListQuery<T, U> limit(long limit) {
+    public TypedListQueryWithOrderBy<T, U> limit(long limit) {
         return this.withLimit(limit);
     }
 
