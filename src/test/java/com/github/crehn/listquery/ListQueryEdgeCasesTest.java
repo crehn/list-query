@@ -1,6 +1,6 @@
 package com.github.crehn.listquery;
 
-import static com.github.crehn.listquery.ListQueryImpl.from;
+import static com.github.crehn.listquery.ListQuery.from;
 import static com.github.crehn.listquery.Paging.page;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -103,7 +103,7 @@ public class ListQueryEdgeCasesTest {
         List<Integer> result = from(list) //
                 .orderBy(Integer::intValue) //
                 .select(e -> e + 1, page(2).eachContaining(2));
-    
+
         assertEquals(asList(4, 5), result);
     }
 

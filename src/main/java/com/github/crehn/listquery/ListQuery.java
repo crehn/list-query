@@ -46,6 +46,10 @@ import java.util.function.Predicate;
  */
 public interface ListQuery {
 
+    public static <T> ListQueryWithFrom<T> from(List<T> list) {
+        return new ListQueryImpl<>(list);
+    }
+
     interface ListQueryWithFrom<T> extends //
             ListQueryOrderBys<T>, //
             ListQuerySpecials<T>, //

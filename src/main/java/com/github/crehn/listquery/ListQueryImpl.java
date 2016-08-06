@@ -20,7 +20,7 @@ import lombok.experimental.Wither;
  */
 @Wither(PACKAGE)
 @AllArgsConstructor(access = PRIVATE)
-@RequiredArgsConstructor(access = PRIVATE)
+@RequiredArgsConstructor(access = PACKAGE)
 public class ListQueryImpl<T> implements //
         ListQueryWithFrom<T>, //
         ListQueryWithWhere<T>, //
@@ -36,13 +36,6 @@ public class ListQueryImpl<T> implements //
     private boolean orderedNaturally = false;
     private boolean distinct = false;
     private long limit = Long.MAX_VALUE;
-
-
-    // from
-
-    public static <T> ListQueryWithFrom<T> from(List<T> list) {
-        return new ListQueryImpl<>(list);
-    }
 
 
     // where
