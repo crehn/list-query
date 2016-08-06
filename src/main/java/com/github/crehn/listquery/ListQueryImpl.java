@@ -25,10 +25,11 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
 
     @NonNull
     @Getter(PACKAGE)
-    private List<T> list;
+    private Collection<T> list;
     @Getter(PACKAGE)
     private Predicate<T> where = e -> true;
     private boolean orderedNaturally = false;
+    private boolean distinct = false;
 
 
     // from
@@ -76,6 +77,14 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
     }
 
 
+    // distinct
+
+    @Override
+    public UntypedListQuery<T> distinct() {
+        return this.withDistinct(true);
+    }
+
+
     // select
 
     @Override
@@ -92,6 +101,7 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
         Stream<U> result = list.stream() //
                 .filter(where) //
                 .map(mapper);
+        result = distinct ? result.distinct() : result;
         return orderedNaturally ? result.sorted() : result;
     }
 

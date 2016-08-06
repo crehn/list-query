@@ -22,6 +22,8 @@ public interface ListQuery {
         UntypedListQuery<T> ordered();
 
         <U, V extends Comparable<V>> TypedListQuery<T, U> orderBy(Function<U, V> getter);
+
+        UntypedListQuery<T> distinct();
     }
 
     public interface UntypedListQueryWithWhereClause<T>
@@ -38,6 +40,8 @@ public interface ListQuery {
         Optional<U> selectFirst(Function<T, U> mapper);
 
         List<U> select(Function<T, U> mapper);
+
+        TypedListQuery<T, U> distinct();
     }
 
     public interface TypedListQueryWithOneType<T> extends ListQuery {

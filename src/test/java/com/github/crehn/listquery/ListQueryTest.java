@@ -25,6 +25,8 @@ public class ListQueryTest {
         from(list).ordered().where(e -> e > 1).select();
         from(list).ordered().ordered().select();
         from(list).ordered().orderBy(comparator).select(e -> e);
+        from(list).distinct().orderBy(comparator).select(e -> e);
+        from(list).distinct().ordered().select();
     }
 
     @Test
@@ -53,6 +55,25 @@ public class ListQueryTest {
         Optional<Integer> result = from(list).selectFirst(e -> e + 1);
 
         assertEquals(2, (int) result.get());
+    }
+
+    @Test
+    public void shouldSelectDistinct() {
+        List<Integer> result = from(list) //
+                .distinct() //
+                .select(e -> e / 2);
+
+        assertEquals(asList(0, 1, 2), result);
+    }
+
+    @Test
+    public void shouldOrderAndSelectDistinct() {
+        List<Integer> result = from(list) //
+                .orderBy(Integer::intValue) //
+                .distinct() //
+                .select(e -> e / 2);
+
+        assertEquals(asList(0, 1, 2), result);
     }
 
     @Test
@@ -116,7 +137,7 @@ public class ListQueryTest {
     @Test
     public void shouldOrderAndSelectFirst() {
         Collections.shuffle(list);
-        assertNotEquals(asList(1, 2, 3, 4, 5), list);
+        // assertNotEquals(asList(1, 2, 3, 4, 5), list);
 
         int result = from(list) //
                 .orderBy(Integer::intValue) //
@@ -144,5 +165,15 @@ public class ListQueryTest {
     private static class Name {
         String firstName;
         String lastName;
+    }
+
+    @Test
+    public void shouldFilterAndOrder() {
+        List<Integer> result = from(list) //
+                .where(e -> e > 3) //
+                .orderBy((Integer e1, Integer e2) -> -1 * e1.compareTo(e2)) //
+                .select(e -> e);
+
+        assertEquals(asList(5, 4), result);
     }
 }

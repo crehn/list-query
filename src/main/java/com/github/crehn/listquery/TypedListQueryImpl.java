@@ -23,9 +23,10 @@ import lombok.experimental.Wither;
 public class TypedListQueryImpl<T, U> implements TypedListQuery<T, U> {
 
     @NonNull
-    private List<T> list;
-    private Predicate<T> where = e -> true;
-    private Comparator<U> comparator = null;
+    private Collection<T> list;
+    private Predicate<T> where;
+    private Comparator<U> comparator;
+    private boolean distinct = false;
 
     public TypedListQueryImpl(ListQueryImpl<T> untypedQuery) {
         this.list = untypedQuery.getList();
@@ -48,7 +49,13 @@ public class TypedListQueryImpl<T, U> implements TypedListQuery<T, U> {
         Stream<U> result = list.stream() //
                 .filter(where) //
                 .map(mapper);
+        result = distinct ? result.distinct() : result;
         return comparator != null ? result.sorted(comparator) : result;
+    }
+
+    @Override
+    public TypedListQuery<T, U> distinct() {
+        return this.withDistinct(true);
     }
 
 }
