@@ -30,6 +30,7 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
     private Predicate<T> where = e -> true;
     private boolean orderedNaturally = false;
     private boolean distinct = false;
+    private long limit = Long.MAX_VALUE;
 
 
     // from
@@ -77,33 +78,20 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
     }
 
 
-    // distinct
+    // distinct, limit
 
     @Override
     public UntypedListQuery<T> distinct() {
         return this.withDistinct(true);
     }
 
+    @Override
+    public UntypedListQuery<T> limit(long limit) {
+        return this.withLimit(limit);
+    }
+
 
     // select
-
-    @Override
-    public Optional<T> selectFirst() {
-        return selectFirst(identity());
-    }
-
-    @Override
-    public <U> Optional<U> selectFirst(Function<T, U> mapper) {
-        return selectStream(mapper).findFirst();
-    }
-
-    private <U> Stream<U> selectStream(Function<T, U> mapper) {
-        Stream<U> result = list.stream() //
-                .filter(where) //
-                .map(mapper);
-        result = distinct ? result.distinct() : result;
-        return orderedNaturally ? result.sorted() : result;
-    }
 
     @Override
     public List<T> select() {
@@ -112,7 +100,48 @@ public class ListQueryImpl<T> implements UntypedListQueryWithWhereClause<T> {
 
     @Override
     public <U> List<U> select(Function<T, U> mapper) {
-        return selectStream(mapper) //
+        return select(mapper, null);
+    }
+
+    @Override
+    public List<T> select(Paging paging) {
+        return select(identity(), paging);
+    }
+
+    @Override
+    public <U> List<U> select(Function<T, U> mapper, Paging paging) {
+        return selectStream(mapper, paging) //
                 .collect(toList());
     }
+
+    private <U> Stream<U> selectStream(Function<T, U> mapper, Paging paging) {
+        Stream<U> result = list.stream() //
+                .filter(where) //
+                .limit(limit) //
+                .map(mapper);
+        result = distinct ? result.distinct() : result;
+        result = applyPaging(result, paging);
+        return orderedNaturally ? result.sorted() : result;
+    }
+
+
+    private <U> Stream<U> applyPaging(Stream<U> result, Paging paging) {
+        if (paging == null)
+            return result;
+
+        return result //
+                .skip((paging.getPage() - 1) * paging.getPerPage()) //
+                .limit(paging.getPerPage());
+    }
+
+    @Override
+    public Optional<T> selectFirst() {
+        return selectFirst(identity());
+    }
+
+    @Override
+    public <U> Optional<U> selectFirst(Function<T, U> mapper) {
+        return selectStream(mapper, null).findFirst();
+    }
+
 }

@@ -27,6 +27,7 @@ public class TypedListQueryImpl<T, U> implements TypedListQuery<T, U> {
     private Predicate<T> where;
     private Comparator<U> comparator;
     private boolean distinct = false;
+    private long limit = Long.MAX_VALUE;
 
     public TypedListQueryImpl(ListQueryImpl<T> untypedQuery) {
         this.list = untypedQuery.getList();
@@ -34,28 +35,50 @@ public class TypedListQueryImpl<T, U> implements TypedListQuery<T, U> {
     }
 
     @Override
+    public TypedListQuery<T, U> distinct() {
+        return this.withDistinct(true);
+    }
+
+    @Override
+    public TypedListQuery<T, U> limit(long limit) {
+        return this.withLimit(limit);
+    }
+
+    @Override
     public List<U> select(Function<T, U> mapper) {
-        return selectStream(mapper) //
+        return select(mapper, null);
+    }
+
+    @Override
+    public List<U> select(Function<T, U> mapper, Paging paging) {
+        return selectStream(mapper, paging) //
                 .collect(toList());
+    }
+
+    private Stream<U> selectStream(Function<T, U> mapper, Paging paging) {
+        Stream<U> result = list.stream() //
+                .filter(where) //
+                .limit(limit) //
+                .map(mapper);
+        result = distinct ? result.distinct() : result;
+        result = applyPaging(result, paging);
+        return comparator != null ? result.sorted(comparator) : result;
+    }
+
+
+    private Stream<U> applyPaging(Stream<U> result, Paging paging) {
+        if (paging == null)
+            return result;
+
+        return result //
+                .skip((paging.getPage() - 1) * paging.getPerPage()) //
+                .limit(paging.getPerPage());
     }
 
     @Override
     public Optional<U> selectFirst(Function<T, U> mapper) {
-        return selectStream(mapper) //
+        return selectStream(mapper, null) //
                 .findFirst();
-    }
-
-    private Stream<U> selectStream(Function<T, U> mapper) {
-        Stream<U> result = list.stream() //
-                .filter(where) //
-                .map(mapper);
-        result = distinct ? result.distinct() : result;
-        return comparator != null ? result.sorted(comparator) : result;
-    }
-
-    @Override
-    public TypedListQuery<T, U> distinct() {
-        return this.withDistinct(true);
     }
 
 }

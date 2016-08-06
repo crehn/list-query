@@ -24,6 +24,12 @@ public interface ListQuery {
         <U, V extends Comparable<V>> TypedListQuery<T, U> orderBy(Function<U, V> getter);
 
         UntypedListQuery<T> distinct();
+
+        UntypedListQuery<T> limit(long limit);
+
+        List<T> select(Paging paging);
+
+        <U> List<U> select(Function<T, U> mapper, Paging paging);
     }
 
     public interface UntypedListQueryWithWhereClause<T>
@@ -42,13 +48,9 @@ public interface ListQuery {
         List<U> select(Function<T, U> mapper);
 
         TypedListQuery<T, U> distinct();
-    }
 
-    public interface TypedListQueryWithOneType<T> extends ListQuery {
-        Optional<T> selectFirst();
+        List<U> select(Function<T, U> mapper, Paging paging);
 
-        Optional<T> selectFirst(Function<T, T> mapper);
-
-        List<T> select(Function<T, T> mapper);
+        TypedListQuery<T, U> limit(long limit);
     }
 }

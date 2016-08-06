@@ -1,6 +1,7 @@
 package com.github.crehn.listquery;
 
 import static com.github.crehn.listquery.ListQueryImpl.from;
+import static com.github.crehn.listquery.Paging.page;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -67,16 +68,6 @@ public class ListQueryTest {
     }
 
     @Test
-    public void shouldOrderAndSelectDistinct() {
-        List<Integer> result = from(list) //
-                .orderBy(Integer::intValue) //
-                .distinct() //
-                .select(e -> e / 2);
-
-        assertEquals(asList(0, 1, 2), result);
-    }
-
-    @Test
     public void shouldFilter() {
         List<Integer> result = from(list).where(e -> e > 2).select();
 
@@ -135,19 +126,6 @@ public class ListQueryTest {
     }
 
     @Test
-    public void shouldOrderAndSelectFirst() {
-        Collections.shuffle(list);
-        // assertNotEquals(asList(1, 2, 3, 4, 5), list);
-
-        int result = from(list) //
-                .orderBy(Integer::intValue) //
-                .selectFirst(e -> e) //
-                .get();
-
-        assertEquals(1, result);
-    }
-
-    @Test
     public void shouldOrderByField() {
         Name alice = new Name("Alice", "Liddell");
         Name bob = new Name("Bob", "Dylan");
@@ -168,12 +146,28 @@ public class ListQueryTest {
     }
 
     @Test
-    public void shouldFilterAndOrder() {
+    public void shouldLimit() {
         List<Integer> result = from(list) //
-                .where(e -> e > 3) //
-                .orderBy((Integer e1, Integer e2) -> -1 * e1.compareTo(e2)) //
-                .select(e -> e);
+                .limit(3) //
+                .select();
 
-        assertEquals(asList(5, 4), result);
+        assertEquals(asList(1, 2, 3), result);
     }
+
+    @Test
+    public void shouldPage() {
+        List<Integer> result = from(list) //
+                .select(page(2).eachContaining(2));
+
+        assertEquals(asList(3, 4), result);
+    }
+
+    @Test
+    public void shouldMapAndPage() {
+        List<Integer> result = from(list) //
+                .select(e -> e + 1, page(2).eachContaining(2));
+
+        assertEquals(asList(4, 5), result);
+    }
+
 }
