@@ -52,7 +52,7 @@ public interface ListQuery {
      * Create a list query which reads from the given collection. Using list query will never change the given
      * collection itself but rather return a new List.
      */
-    public static <T> ListQueryWithFrom<T> from(Collection<T> list) {
+    static <T> ListQueryWithFrom<T> from(Collection<T> list) {
         return new ListQueryImpl<>(list);
     }
 
