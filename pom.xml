@@ -19,7 +19,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <additionalparam>-Xdoclint:none</additionalparam> <!-- http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html -->
+        <additionalparam>-Xdoclint:-missing</additionalparam>
     </properties>
 
     <scm>

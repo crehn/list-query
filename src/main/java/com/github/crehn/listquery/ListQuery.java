@@ -50,7 +50,7 @@ public interface ListQuery {
 
     /**
      * Create a list query which reads from the given collection. Using list query will never change the given
-     * collection itself but rather return a new List<T>.
+     * collection itself but rather return a new List.
      */
     public static <T> ListQueryWithFrom<T> from(Collection<T> list) {
         return new ListQueryImpl<>(list);
@@ -107,7 +107,7 @@ public interface ListQuery {
         /**
          * Sort the result based on the natural order defined by implementing Comparable. The result of the query is
          * sorted (i.e. not the source). So when you specify a mapping to a new type in the select clause, that new type
-         * needs to implement Comparable<U> rather than the type of the source list. If you need to sort based on the
+         * needs to implement Comparable rather than the type of the source list. If you need to sort based on the
          * source list, use {@link Stream} instead.
          *
          * <code>select()</code> will throw a ClassCastException if the resulting type is not comparable.
@@ -131,11 +131,11 @@ public interface ListQuery {
          * Name alice = new Name("Alice", "Liddell");
          * Name bob = new Name("Bob", "Dylan");
          * Name clara = new Name("Clara", "Oswald");
-         * List<Name> nameList = asList(alice, bob, clara);
+         * List&lt;Name&gt; nameList = asList(alice, bob, clara);
          *
-         * List<Name> result = from(nameList) //
+         * List&lt;Name&gt; result = from(nameList) //
          *         .orderBy(Name::getLastName) //
-         *         .select(e -> e);
+         *         .select(e -&gt; e);
          * </code>
          * </pre>
          *
@@ -198,8 +198,8 @@ public interface ListQuery {
          * </pre>
          *
          * @param paging
-         *            Specifies only to return page {@link Paging#getPage()} with {@link Paging#getPerPage()} elements
-         *            per page. Paging starts with page 1.
+         *            Specifies only to return page {@link Paging#page} with {@link Paging#perPage} elements per page.
+         *            Paging starts with page 1.
          * @see Collectors#toList()
          */
         List<T> select(Paging paging);
@@ -229,8 +229,8 @@ public interface ListQuery {
          * </pre>
          *
          * @param paging
-         *            Specifies only to return page {@link Paging#getPage()} with {@link Paging#getPerPage()} elements
-         *            per page. Paging starts with page 1.
+         *            Specifies only to return page {@link Paging#page} with {@link Paging#perPage} elements per page.
+         *            Paging starts with page 1.
          * @see Collectors#toList()
          * @see Stream#map(Function)
          */
@@ -294,8 +294,8 @@ public interface ListQuery {
          * </pre>
          *
          * @param paging
-         *            Specifies only to return page {@link Paging#getPage()} with {@link Paging#getPerPage()} elements
-         *            per page. Paging starts with page 1.
+         *            Specifies only to return page {@link Paging#page} with {@link Paging#perPage} elements per page.
+         *            Paging starts with page 1.
          * @see Collectors#toList()
          * @see Stream#map(Function)
          */

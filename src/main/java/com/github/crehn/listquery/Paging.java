@@ -7,8 +7,8 @@ import lombok.Value;
 
 /**
  * Specifies paging of the result of a list query. The first page is page 1 (not page 0). Each page has at most
- * {@link #getPerPage()} elements. Construct instances using {@link #page}. Example:
- * 
+ * {@link #perPage} elements. Construct instances using {@link #page(int)}. Example:
+ *
  * <pre>
  * <code>
  * page(2).eachContaining(10);
