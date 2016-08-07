@@ -1,7 +1,7 @@
 # ListQuery
-
 [![Build Status](https://travis-ci.org/crehn/list-query.svg?branch=master)](https://travis-ci.org/crehn/list-query)
 [![Dependency Status](https://www.versioneye.com/user/projects/57a59d126725bd470b300341//badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57a59d126725bd470b300341/)
+[ ![Download](https://api.bintray.com/packages/crehn/maven/list-query/images/download.svg) ](https://bintray.com/crehn/maven/list-query/_latestVersion)
 
 Java 8 finally instroduced lambdas and streams. Streams offer great flexibility but can be a bit verbose. This library simplifies using them in those 80% of the cases where the full flexibility is not needed and you rather want to optimize readability.
 
