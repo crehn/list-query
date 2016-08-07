@@ -4,7 +4,6 @@ import static com.github.crehn.listquery.ListQuery.from;
 import static com.github.crehn.listquery.Paging.page;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.util.*;
 
@@ -92,7 +91,7 @@ public class ListQueryTest {
     @Test
     public void shouldOrderNaturally() {
         Collections.shuffle(list);
-        assertNotEquals(asList(1, 2, 3, 4, 5), list);
+        // assertNotEquals(asList(1, 2, 3, 4, 5), list);
 
         List<Integer> result = from(list) //
                 .ordered() //
