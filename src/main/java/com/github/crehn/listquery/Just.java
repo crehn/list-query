@@ -72,7 +72,7 @@ public class Just {
 
     /**
      * Returns true iff all elements in the given collection satisfy the given predicate.
-     * 
+     *
      * @see Stream#allMatch(Predicate)
      */
     public static <T> boolean allAre(Collection<T> list, Predicate<T> predicate) {
@@ -82,7 +82,7 @@ public class Just {
 
     /**
      * Returns true iff at least one element in the given collection satisfies the given predicate.
-     * 
+     *
      * @see Stream#anyMatch(Predicate)
      */
     public static <T> boolean oneExists(Collection<T> list, Predicate<T> predicate) {
@@ -92,7 +92,7 @@ public class Just {
 
     /**
      * Returns true iff one of the elements in the given collection satisfy the given predicate.
-     * 
+     *
      * @see Stream#noneMatch(Predicate)
      */
     public static <T> boolean noneIs(Collection<T> list, Predicate<T> predicate) {

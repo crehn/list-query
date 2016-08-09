@@ -1,5 +1,7 @@
 package com.github.crehn.listquery;
 
+import static java.util.Arrays.asList;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -54,6 +56,18 @@ public interface ListQuery {
      */
     static <T> ListQueryWithFrom<T> from(Collection<T> list) {
         return new ListQueryImpl<>(list);
+    }
+
+    /**
+     * Create a list query which reads from the given array. Using list query will never change the array itself but
+     * rather return a new List.
+     *
+     * @implNote This method converts the array to a list, and does not operate on the array directly, so there is some
+     *           performance cost.
+     */
+    @SafeVarargs
+    static <T> ListQueryWithFrom<T> from(T... array) {
+        return new ListQueryImpl<>(asList(array));
     }
 
     interface ListQueryWithFrom<T> extends //
