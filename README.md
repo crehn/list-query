@@ -74,3 +74,19 @@ SELECT ::= MAP_SELECT | IDENTITY_SELECT ;
 IDENTITY_SELECT ::= ".select()" | ".select(paging)" | ".selectFirst()" ;                    
 MAP_SELECT ::= ".select(mapper)" | ".select(mapper, paging)" | ".selectFirst(mapper)" ;     
 ```
+
+## Just
+
+There are even simpler cases. Sometimes you just want to map or filter something. A typical example would be to convert a list of database entities to DTOs. 
+
+Using Streams you would have to call `stream()` and `collect(Collectors.toList())`. Using `ListQuery` you'd use something like
+```Java
+from(entities).select(Entity::toApi);
+```
+
+An alternative would be to use `Just.map`:
+```Java
+map(entities, Entity::toApi)
+```
+
+See [JustTest](/src/test/java/com/github/crehn/listquery/JustTest.java)
