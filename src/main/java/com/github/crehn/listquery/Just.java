@@ -84,6 +84,8 @@ public class Just {
     }
 
     /**
+     * @deprecated use {@link String#join} instead.
+     * 
      * Returns a string joining the string representations of each element using the given delimiter. Invokes
      * <code>toString()</code> for each element.
      *
@@ -92,6 +94,7 @@ public class Just {
      *
      * @see Collectors#joining(CharSequence)
      */
+    @Deprecated
     public static <T> String join(T[] array, String delimiter) {
         return join(asList(array), delimiter);
     }
