@@ -1,5 +1,6 @@
 package com.github.crehn.listquery;
 
+import static java.util.Comparator.comparing;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PACKAGE;
@@ -71,8 +72,7 @@ public class ListQueryImpl<T> implements //
 
     @Override
     public <U, V extends Comparable<V>> TypedListQueryWithOrderBy<T, U> orderBy(Function<U, V> getter) {
-        return new TypedListQueryImpl<T, U>(this)
-                .withComparator((e1, e2) -> getter.apply(e1).compareTo(getter.apply(e2)));
+        return new TypedListQueryImpl<T, U>(this).withComparator(comparing(getter));
     }
 
 
