@@ -49,6 +49,7 @@ public class JustTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void shouldJustJoinArray() {
         String result = join(array, ", ");
 
