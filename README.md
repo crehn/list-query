@@ -24,7 +24,7 @@ or
 ```Java
 names.stream()
     .filter(name -> name.getFirstName().startsWith("A"))
-    .sorted((n1, n2) -> n1.getFirstName().compareTo(n2.getFirstName()))
+    .sorted(Comparator.comparing(Name::getLastName))
     .collect(Collectors.toList());
 ```
 
